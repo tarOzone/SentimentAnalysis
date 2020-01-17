@@ -17,7 +17,10 @@ def build_bi_lstm(embedded, lstm_units=64, rnn_model='lstm', dropout=0.2, recurr
 
 
 def build_attention(bi_lstm, lstm_units, activation='tanh'):
-    attention = Dense(1, activation=activation)(bi_lstm)
+    attention = bi_lstm
+    # you can model layers here
+
+    attention = Dense(1, activation=activation)(attention)
     attention = Flatten()(attention)
     attention = Activation('softmax')(attention)
     attention = RepeatVector(lstm_units * 2)(attention)
@@ -28,5 +31,7 @@ def build_attention(bi_lstm, lstm_units, activation='tanh'):
 def build_classifier(bi_lstm, attention, lstm_units):
     classifier = Multiply()([bi_lstm, attention])
     classifier = Lambda(lambda x_in: K.sum(x_in, axis=2), output_shape=(lstm_units * 2,))(classifier)
+    # you can model layers here
+
     classifier = Dense(1, activation='sigmoid')(classifier)
     return classifier

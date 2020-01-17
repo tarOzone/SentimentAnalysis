@@ -3,6 +3,7 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.losses import binary_crossentropy
 from tensorflow.keras.optimizers import Adam
 
+from model.embedding import build_embedding
 from model.attention import build_attention, build_bi_lstm, build_classifier
 from utils.gpu_limiter import Session
 
@@ -29,22 +30,7 @@ def main(*args, **kwargs):
     model.summary()
 
 
-def main2():
-    import numpy as np
-    from tensorflow.keras.datasets import imdb
-
-    num_words = 20000
-    (train_x, train_y), (test_x, test_y) = imdb.load_data(num_words=num_words)
-
-    print(max([len(x) for x in train_x]))
-    print(max([len(x) for x in test_x]))
-
-
-
-
 if __name__ == "__main__":
     sess = Session(gpu_factor=0.7, disable_eager=True)  # init Session for GPU limiter
-    main2()  # run the main function
+    main()  # run the main function
     del sess    # remember to close the session
-
-
