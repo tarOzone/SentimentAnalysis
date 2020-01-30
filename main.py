@@ -33,4 +33,4 @@ def main(*args, **kwargs):
 if __name__ == "__main__":
     sess = Session(gpu_factor=0.7, disable_eager=True)  # init Session for GPU limiter
     main()  # run the main function
-    del sess    # remember to close the session
+    del sess  # remember to close the session

@@ -30,7 +30,7 @@ def build_attention(bi_lstm, lstm_units, activation='tanh'):
 
 def build_classifier(bi_lstm, attention, lstm_units):
     classifier = Multiply()([bi_lstm, attention])
-    classifier = Lambda(lambda x_in: K.sum(x_in, axis=2), output_shape=(lstm_units * 2,))(classifier)
+    classifier = Lambda(lambda x_in: K.sum(x_in, axis=-2), output_shape=(lstm_units * 2,))(classifier)
     # you can model layers here
 
     classifier = Dense(1, activation='sigmoid')(classifier)
