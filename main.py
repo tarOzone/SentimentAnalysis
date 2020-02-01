@@ -5,7 +5,9 @@ from tensorflow.keras.optimizers import Adam
 
 from model.embedding import build_embedding
 from model.attention import build_attention, build_bi_lstm, build_classifier
-from utils.gpu_limiter import Session
+from utils.gpu_limit_session import GpuLimitSession
+
+from preprocessing.dataset_preprocessing import get_dataset
 
 
 def main(*args, **kwargs):
@@ -31,6 +33,14 @@ def main(*args, **kwargs):
 
 
 if __name__ == "__main__":
-    sess = Session(gpu_factor=0.7, disable_eager=True)  # init Session for GPU limiter
-    main()  # run the main function
-    del sess  # remember to close the session
+    # with GpuLimitSession(gpu_factor=0.7, disable_eager=True) as gpu:
+    #     main()  # run the main function
+
+    train_seqs, test_seqs = get_dataset(
+        "dataset/aclImdb",
+        "dataset/preprocessed_train.pickle",
+        "dataset/preprocessed_test.pickle"
+    )
+
+    print(train_seqs)
+    print(test_seqs)

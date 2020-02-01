@@ -17,12 +17,19 @@ class SentencePreprocessor:
         self.word_index["<UNUSED>"] = 3
         self.rev_word_index = {v: k for k, v in self.word_index.items()}
 
-    def encode_sentence(self, sentence):
+    def encode_sentence(self, sentence, return_numpy=False):
         sentence = self._tokenize(sentence)
         sentence = sentence.split(" ")
         sentence = ["<START>"] + sentence if sentence[0] != "<START>" else sentence
         encoded_sentence = [self.word_index.get(s, 2) for s in sentence]
-        return self._pad_sentence(encoded_sentence)[0]
+        padded = self._pad_sentence(encoded_sentence)[0]
+        return padded if not return_numpy else np.array(padded)
+
+    def decode_sentence(self, encoded_sentence, capitalize=True, return_numpy=False):
+        encoded_sentence = [s for s in encoded_sentence if s not in [0, 1]]
+        sentence = " ".join([self.rev_word_index.get(i, "?") for i in encoded_sentence])
+        decodded = sentence.capitalize() if capitalize else sentence
+        return decodded if not return_numpy else np.array(decodded)
 
     def pad_dataset(self, data):
         return pad_sequences(
@@ -44,7 +51,3 @@ class SentencePreprocessor:
             content = f.read()
         return json.loads(content)
 
-    def decode_sentence(self, encoded_sentence, capitalize=True):
-        encoded_sentence = [s for s in encoded_sentence if s not in [0, 1]]
-        sentence = " ".join([self.rev_word_index.get(i, "?") for i in encoded_sentence])
-        return sentence.capitalize() if capitalize else sentence
