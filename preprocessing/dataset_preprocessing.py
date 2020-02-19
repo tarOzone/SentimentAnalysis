@@ -19,7 +19,6 @@ def get_dataframe(start_path):
                 text.append(s.replace("\n", " ").replace("\r", " "))
                 # convert positive reviews to 1 and negative reviews to zero
                 sent.append(1 if p == 'pos' else 0)
-
     df['text'] = text
     df['sent'] = sent
     # This line shuffles the data so you don't end up with contiguous
@@ -28,7 +27,7 @@ def get_dataframe(start_path):
     return df
 
 
-def preprocess(train_df, test_df, NUM_WORDS=8000, SEQ_LEN=128):
+def preprocess(train_df, test_df, NUM_WORDS=8000, SEQ_LEN=150):
     # create tokenizer for our data
     tokenizer = Tokenizer(num_words=NUM_WORDS, oov_token='<UNK>')
     tokenizer.fit_on_texts(train_df['text'])
@@ -54,7 +53,6 @@ def get_dataset_from_raw(raw_data_dir, pickle_train_dir, pickle_test_dir):
         pickle.dump(train_seqs, f)
     with open(pickle_test_dir, "wb") as f:
         pickle.dump(test_seqs, f)
-
     return train_seqs, test_seqs
 
 
@@ -64,9 +62,7 @@ def get_dataset(raw_data_dir, pickle_train_dir, pickle_test_dir):
             train_seqs = pickle.load(pck_f)
         with open(pickle_test_dir, "rb") as pck_f:
             test_seqs = pickle.load(pck_f)
-
-        print("****** PICKLE")
+        print("[INFO] get dataset from pickle")
         return train_seqs, test_seqs
-
-    print("******* RAW")
+    print("[INFO] get dataset from Imdb")
     return get_dataset_from_raw(raw_data_dir, pickle_train_dir, pickle_test_dir)

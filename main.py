@@ -36,13 +36,12 @@ def main(*args, **kwargs):
 
 
 if __name__ == "__main__":
-    load_dotenv()
-
     # load dataset for training
+    load_dotenv()
     raw_data_dir = env("RAW_DATA_IMDB_DIR")
     pickle_train_dir = env("PICKLE_TRAIN_DIR")
     pickle_test_dir = env("PICKLE_TEST_DIR")
     train_seqs, test_seqs = get_dataset(raw_data_dir, pickle_train_dir, pickle_test_dir)
 
-    # with GpuLimitSession(gpu_factor=0.7, disable_eager=True) as gpu:
-    #     main()  # run the main function
+    with GpuLimitSession(gpu_factor=0.8, disable_eager=True) as gpu:
+        main()
