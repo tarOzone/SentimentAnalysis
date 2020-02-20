@@ -47,7 +47,7 @@ class SentencePreprocessor:
         return self.pad_dataset(np.array([sentence]))
 
     def _read_imdb_word_index(self):
-        with open("../dataset/imdb_word_index.json", "r") as f:
+        with open("../data/imdb_word_index.json", "r") as f:
             content = f.read()
         return json.loads(content)
 
